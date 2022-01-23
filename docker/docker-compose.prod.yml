@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+      target: prod
+    image: "${BACKEND_IMAGE}"
+    container_name: backend
+    restart: unless-stopped
+    ports:
+      - "5000"
+    environment:
+      - FLASK_ENV=production
+      - APP_SETTINGS=meetx.config.ProductionConfig
+      - SECRET_KEY=${SECRET_KEY}
+
+  nginx:
+    image: linuxserver/letsencrypt
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+    volumes:
+      - ../nginx/nginx.conf:/config/nginx/nginx.conf
+      - ../nginx/prod.conf:/config/nginx/site-confs/default
+    environment:
+      - PUID=1050
+      - PGID=1050
+      - EMAIL=${LETSENCRYPT_EMAIL}
+      - URL=${DOMAIN}
+      - SUBDOMAINS=${SUBDOMAIN}
+      - ONLY_SUBDOMAINS=true
+      - TZ=Europe/Kyiv
+    depends_on:
+      - backend
+      - frontend
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile-prod
+      target: prod
+    container_name: frontend
+    restart: unless-stopped
+    ports:
+      - "3000"
+    depends_on:
+      - backend

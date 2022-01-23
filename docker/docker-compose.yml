@@ -1,0 +1,50 @@
+version: '3.7'
+
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+      target: dev
+    volumes:
+      - '../backend:/app'
+    ports:
+      - "5002:5000"
+    environment:
+      - FLASK_CONFIG=development
+      - FLASK_ENV=development
+      - APP_SETTINGS=meetx.config.DevelopmentConfig
+      - SECRET_KEY=MuYsoHerJsj27
+
+  nginx:
+    build:
+      context: ../nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ../nginx/nginx.conf:/config/nginx/nginx.conf
+      - ../nginx/dev.conf:/config/nginx/site-confs/default
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+      - frontend
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    volumes:
+      - '../frontend:/app/'
+    ports:
+      - "3008:3000"
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_SIGNALING_SERVER=ws://127.0.0.1:5001/
+      - REACT_APP_STUN_SERVERS=
+      - REACT_APP_TURN_SERVERS=
+      - REACT_APP_TURN_USERNAME=
+      - REACT_APP_TURN_CREDENCIAL=
+    depends_on:
+      - backend

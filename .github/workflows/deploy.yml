@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    working-directory: ./frontend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+      - name: Deploy source code
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_DEPLOY_HOST }}
+          username: ${{ secrets.SSH_DEPLOY_USER }}
+          key: ${{ secrets.SSH_DEPLOY_KEY }}
+          port: ${{ secrets.SSH_DEPLOY_PORT }}
+          script: |
+            (git clone ssh://git@github.com/${{ github.repository }} -b ${{ github.ref_name }} source) || (cd source && git pull)
+            cd source && docker-compose  --env-file .env -f docker/docker-compose.prod.yml up -d --build
