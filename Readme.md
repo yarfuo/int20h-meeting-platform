@@ -4,7 +4,7 @@ Anonymous P2P video chat with rooms
 
 Demo:  https://meetx.yar.services/
 
-## ScreenShot
+## Screenshot
 
 ![screenshot](https://user-images.githubusercontent.com/42946445/150870787-5707de51-4dbc-4b36-9c2d-ae53fdb093e3.jpg)
 
