@@ -7,10 +7,10 @@ Demo:  https://meetx.yar.services/
 ## Features
 
 - P2P video chat
-- rooms
+- rooms with invite link
 - off/on video
 - off/on micro
-- room creator can kick users 
+- room creator can kick users
 
 
 ## Built With
@@ -24,7 +24,6 @@ Demo:  https://meetx.yar.services/
 - letsencrypt 
 - github workflow
 - styled-components
-- ssh
 
 
 ## Getting Started
