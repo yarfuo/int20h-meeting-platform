@@ -24,10 +24,10 @@ Demo:  https://meetx.yar.services/
 - **React 17** with Typescript, eslint and react-router
 - WebRTC by simple-peer
 - socket.io
+- **Auto Deploy** by github workflow
 - Docker compose for easier development
 - Nginx as a reverse proxy to allow backend and frontend on the same port
 - letsencrypt 
-- github workflow
 - styled-components
 
 
